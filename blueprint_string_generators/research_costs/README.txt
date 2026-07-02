@@ -1,0 +1,5 @@
+This script generates Factorio blueprints containing one or more constant combinators with pre-calculated exponential values. This is primarily intended for calculating research costs.
+Each calculated value is stored as a separate signal.
+The script allows for the creation of a constant combinator acting as an index table, mapping each input value to a specific signal. It also enables the creation of a results table that assigns the calculated exponential value to each signal. The output value corresponds to the input value associated with the same signal.
+For 32-bit results, only a single constant combinator is generated. For 48-bit values, two constant combinators are gnerated: one holds the lower 16 bits, while the other holds the upper 32 bits.
+The script is currently limited to 142 input values.
