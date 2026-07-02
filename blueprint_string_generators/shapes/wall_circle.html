@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h3>Factorio - Wall circle generator</h3>
+    <table>
+    <tr><td>Diameter:</td><td><input type="number" id="diameter" value="320"></td><tr>
+    </table>
+    <br>
+    <button onclick="generate()">Generate blueprint</button><br>
+    <br>
+    <button onclick="copyToClipboard()">Copy result to Clipboard</button><br>
+    <br>
+    Blueprint string:<br>    
+    <pre id="blueprintString" style="border: 1px solid black; padding: 10px; display: inline-block; font-family: monospace; white-space: pre-wrap; word-break: break-all;"></pre>
+    <script src="../blueprint.js"></script>
+    <script>
+        function createWall(i, a, b) {
+            return {
+                entity_number: i,
+                name: "stone-wall",
+                position: {
+                    x: a,
+                    y: b
+                }
+            };
+        }
+
+        function generate()
+        {
+            const wallCircle = {
+                blueprint : {
+                    entities: [],
+                    item: "blueprint",
+                    version: 562949958139904
+               }
+            };
+
+            const diameter = parseFloat(document.getElementById('diameter').value);
+            const radius_o = diameter / 2;
+            const radius_m = radius_o - 0.5;
+
+            for (let i = 0; i < radius_o; i++)
+            {
+                let a = 0.5 + i;
+                let b = Math.sqrt((radius_m * radius_m) - (a * a));
+                b = 0.5 + Math.round(b - 0.5);
+
+                if (a > b) break; // stop when the quarter circle is exceeded
+
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 1, a, b));
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 2, -a, b));
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 3, -a, -b));
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 4, a, -b));
+
+                if (a == b) break; // stop when the quarter circle is reached
+
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 5, b, a));
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 6, -b, a));
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 7, -b, -a));
+                wallCircle.blueprint.entities.push(createWall(i * 8 + 8, b, -a));
+            }
+
+            const outputstring = JSON.stringify(wallCircle, null, null);
+            encodeAndOutputBlueprint(outputstring, 'blueprintString');
+        }
+         
+        function copyToClipboard()
+        {
+            const textToCopy = document.getElementById('blueprintString').innerText;
+
+            navigator.clipboard.writeText(textToCopy);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+These files are used to create blueprints for the game Factorio, which contain entities positioned in such a way that they form geometric shapes.
+The idea for this came from: https://www.reddit.com/r/factorio/comments/1p8obph/circular_mega_base/
